@@ -6,7 +6,27 @@ Module commandHandler
         If args(0) = "$cat" Then
             command_cat.run(message)
         End If
-        If args(0) = "$ec" Then
+        If args(0) = "$eligible" Then
+            command_eligible.run(message)
+        End If
+        If args(0) = "$level" Or args(0) = "$xp" Then
+            command_level.run(message)
+        End If
+        If message.Author.Id = 316818056049590282 Then
+            Console.WriteLine("passed author")
+            If args(0) = "$sendExclusivePic" Then
+                Console.WriteLine("passed command")
+                Dim fulldesc As String = ""
+                For Each arg As String In args
+                    If arg = args(0) Or arg = args(1) Then
+                        Continue For
+                    End If
+                    fulldesc = fulldesc & arg & " "
+                Next
+                command_publishcatpicture.run(message, args(1), fulldesc)
+            End If
+        End If
+        If args(0) = "$ec9467" Then
             For Each guild In discordEv.Guilds
                 Dim channels = guild.Channels.Where(Function(x) Not (TypeOf x Is ICategoryChannel Or TypeOf x Is IVoiceChannel))
 
