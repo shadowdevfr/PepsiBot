@@ -17,7 +17,18 @@ Module statusClock
     End Sub
 
     Public Sub updateStatus()
-        Dim status = "pepsi"
+        Dim random = New Random
+        Dim rnd = random.Next(1, 3)
+        Dim status = "$help"
+        If rnd = 1 Then
+            status = "$help | " & discordEv.Guilds.Count & " guilds!"
+        ElseIf rnd = 2 Then
+            Dim globalMemberCount = 0
+            For Each guild In discordEv.Guilds
+                globalMemberCount += guild.MemberCount
+            Next
+            status = "$help | " & globalMemberCount & " members."
+        End If
         Program.discordEv.SetGameAsync(status, "", ActivityType.Watching)
         Console.WriteLine("[Status] Updated status to " & status)
     End Sub

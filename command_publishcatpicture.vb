@@ -10,12 +10,13 @@ Module command_publishcatpicture
         Dim channelamounts = 0
         Dim guildamount = 0
         For Each guild In discordEv.Guilds
-            Dim channels = guild.Channels.Where(Function(x) Not (TypeOf x Is ICategoryChannel Or TypeOf x Is IVoiceChannel))
+            Dim channels = guild.Channels.Where(Function(x) TypeOf x Is ISocketMessageChannel)
             For Each channel As ISocketMessageChannel In channels.ToList
                 If channel.Name Is Nothing Then
                     Continue For
                 End If
                 If channel.Name.ToString.ToLower.Contains("pepsi") Then
+                    Console.Write("sent to #" & channel.Name)
                     Await channel.SendMessageAsync("", False, eb.Build)
                     channelamounts += 1
                     System.Threading.Thread.Sleep(200)

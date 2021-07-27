@@ -42,17 +42,18 @@ Module Program
         statusClock.updateStatus()
         statusClock.startStatusClock()
         timeCheckClock.startClock()
+        ec_items.init()
 
         Return Task.CompletedTask
     End Function
 
-    Private Async Function onMessage(message As SocketMessage) As Task
+    Private Function onMessage(message As SocketMessage) As Task
         Dim msguild As SocketGuildChannel = message.Channel
         If message.Author.Id = discordEv.CurrentUser.Id Then 'Check if self message
 
         Else
-            commandHandler.handle(message)
-            levelingChat.handleLeveling(message)
+            Task.Run(Sub() commandHandler.handle(message))
+            Task.Run(Sub() levelingChat.handleLeveling(message))
         End If
     End Function
 
