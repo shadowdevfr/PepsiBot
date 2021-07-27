@@ -48,13 +48,17 @@ Module Program
     End Function
 
     Private Function onMessage(message As SocketMessage) As Task
-        Dim msguild As SocketGuildChannel = message.Channel
-        If message.Author.Id = discordEv.CurrentUser.Id Then 'Check if self message
+        Try
+            Dim msguild As SocketGuildChannel = message.Channel
+            If message.Author.Id = discordEv.CurrentUser.Id Then 'Check if self message
 
-        Else
-            Task.Run(Sub() commandHandler.handle(message))
-            Task.Run(Sub() levelingChat.handleLeveling(message))
-        End If
+            Else
+                Task.Run(Sub() commandHandler.handle(message))
+                Task.Run(Sub() levelingChat.handleLeveling(message))
+            End If
+        Catch ex As Exception
+
+        End Try
     End Function
 
     Private Async Function onMessageUpdate(ByVal before As Cacheable(Of IMessage, ULong), ByVal after As SocketMessage, ByVal channel As ISocketMessageChannel) As Task

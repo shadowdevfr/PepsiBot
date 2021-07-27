@@ -3,7 +3,7 @@ Module command_dailyReward
     Async Sub run(message As IMessage)
         Dim nextClaim = redis.getValue("Users_" & message.Author.Id & "_dailyClaimNext")
         Dim secondsBeforeClaim = 0
-        Dim uTime As Double = (DateTime.UtcNow - New DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds
+        Dim uTime = New System.Net.WebClient().DownloadString("https://bot.shadowcat.club/api/time.php")
         Dim eb As EmbedBuilder = New EmbedBuilder
         If nextClaim Is Nothing Then
             nextClaim = 0

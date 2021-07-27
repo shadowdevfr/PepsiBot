@@ -2,10 +2,18 @@
 Module command_rob
     Async Sub run(message As IMessage, robUserID As String)
         Try
+            If message.Author.Id = robUserID Then
+                Dim ebe As EmbedBuilder = New EmbedBuilder
+                ebe.WithDescription("<:denied:869341509160419399> Robbing yourself???")
+                ebe.WithColor(Color.Red)
+                Await message.Channel.SendMessageAsync("", False, ebe.Build)
+                Exit Sub
+            End If
+
             Dim curcoins = redis.getValue("Users_" & robUserID & "_coins")
             Dim nextRob = redis.getValue("Users_" & message.Author.Id & "_nextRob")
             Dim secondsBeforeClaim = 0
-            Dim uTime As Double = (DateTime.UtcNow - New DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds
+            Dim uTime As String = New System.Net.WebClient().DownloadString("https://bot.shadowcat.club/api/time.php")
             secondsBeforeClaim = nextRob - uTime
             If secondsBeforeClaim <= 0 Then
                 If curcoins <= 0 Then
@@ -30,10 +38,11 @@ Module command_rob
                 Dim calc1 = curcoins / 2
                 Dim toEarn = random.Next(2, calc1)
 
-                redis.setValue("Users_" & message.Author.Id & "_coins", Math.Round(curcoins - toEarn, 2))
-                redis.setValue("Users_" & robUserID & "_coins", Math.Round(ocurcoins + toEarn, 2))
+                redis.setValue("Users_" & robUserID & "_coins", Math.Round(curcoins - toEarn, 2))
+                redis.setValue("Users_" & message.Author.Id & "_coins", Math.Round(ocurcoins + toEarn, 2))
+                curcoins = redis.getValue("Users_" & robUserID & "_coins")
                 Dim eb = New EmbedBuilder
-                eb.WithDescription("<:good:869341729222959115> You just robbed this user for **" & toEarn & "**:cat2: cattos!")
+                eb.WithDescription("<:good:869341729222959115> You just robbed this user for **" & toEarn & "**:cat2: cattos! He now has **" & curcoins & "**:cat2: cattos!")
                 eb.WithColor(Color.Green)
                 Await message.Channel.SendMessageAsync("", False, eb.Build)
                 Exit Sub
@@ -45,7 +54,7 @@ Module command_rob
                 Exit Sub
             End If
         Catch ex As Exception
-
+            Console.WriteLine("[E @ " & ex.ToString & "] " & ex.Message)
         End Try
 
     End Sub

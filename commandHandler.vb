@@ -13,7 +13,7 @@ Module commandHandler
         End If
         If args(0) = "$level" Or args(0) = "$xp" Or args(0) = "$userinfo" Or args(0) = "$i" Then
             Console.WriteLine("[Commands]" & message.Author.Username & "#" & message.Author.Discriminator & " executed command " & args(0))
-            If args.Length > 1 Then
+            If args.Length >= 2 Then
                 Task.Run(Sub() command_level.run(message, args(1).Replace("<@", "").Replace("!", "").Replace(">", "")))
             Else
                 Task.Run(Sub() command_level.run(message))
@@ -44,7 +44,7 @@ Module commandHandler
         End If
         If args(0) = "$buy" Then
             Console.WriteLine("[Commands]" & message.Author.Username & "#" & message.Author.Discriminator & " executed command " & args(0))
-            If args.Length < 1 Then
+            If args.Length < 2 Then
                 message.Channel.SendMessageAsync("You need to put an item ID!")
             Else
                 Task.Run(Sub() command_buyitem.run(message, args(1)))
@@ -60,7 +60,7 @@ Module commandHandler
         End If
         If args(0) = "$rob" Then
             Console.WriteLine("[Commands]" & message.Author.Username & "#" & message.Author.Discriminator & " executed command " & args(0))
-            If args.Length < 1 Then
+            If args.Length < 2 Then
                 message.Channel.SendMessageAsync("You need to ping an user!")
             Else
                 Task.Run(Sub() command_rob.run(message, args(1).Replace("<@", "").Replace("!", "").Replace(">", "")))

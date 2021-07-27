@@ -30,7 +30,7 @@ Module command_level
                 lcurlvl = 0.15
             End If
             description = description & "> You have **" & curlvl & "** cat XP on this server." & vbCrLf
-            eb.WithTitle("Progress")
+            eb.WithTitle("Stats of " & redis.getValue("Users_" & userToSee & "_username"))
             eb.WithDescription(description)
             eb.WithColor(Color.Gold)
 
