@@ -13,33 +13,48 @@ Module levelingChat
 
             Dim guild As IGuildChannel = message.Channel
             ' register user for GUILD leaderboard
-            Dim gusersArray() As String = redis.getArray("Guilds_" & guild.Id & "_Users")
+            Dim gusersArray() As String = redis.getArray("Guilds_" & guild.Guild.Id & "_Users")
             If Not gusersArray.Contains(message.Author.Id) Then
-                redis.addValueToArray("Guilds_" & guild.Id & "_Users", message.Author.Id)
+                redis.addValueToArray("Guilds_" & guild.Guild.Id & "_Users", message.Author.Id)
             End If
 
-            ' store GLOBAL xp
+            ' store GLOBAL user xp
             Dim curlvl = redis.getValue("Users_" & message.Author.Id & "_XP")
             If curlvl = Nothing Then
                 curlvl = 0
             End If
-            redis.setValue("Users_" & message.Author.Id & "_XP", Math.Round(CDec(curlvl + config.pointsMultiplier), 2))
+            redis.setValue("Users_" & message.Author.Id & "_XP", Math.Round(CDbl(curlvl + config.pointsMultiplier), 2))
 
-            ' store GUILD xp
-            curlvl = redis.getValue("Guilds_" & guild.Id & "_Users_" & message.Author.Id & "_XP")
+            Dim curobj = redis.getValue("Users_" & message.Author.Id & "_objective")
+            If curobj = Nothing Then
+                curobj = 10
+            End If
+            Dim percentage = Math.Round((100 * curlvl) / curobj, 1)
+            If percentage >= 100 Then
+                ' objective done
+                Dim curcoins = redis.getValue("Users_" & message.Author.Id & "_coins")
+                redis.setValue("Users_" & message.Author.Id & "_coins", Math.Round(curcoins + (curobj * 0.8), 2))
+                redis.setValue("Users_" & message.Author.Id & "_objective", Math.Round(CDbl(curobj + 10), 2))
+            End If
+
+
+            ' store GUILD user xp
+            curlvl = redis.getValue("Guilds_" & guild.Guild.Id & "_Users_" & message.Author.Id & "_XP")
             If curlvl = Nothing Then
                 curlvl = 0
             End If
-            redis.setValue("Guilds_" & guild.Id & "_Users_" & message.Author.Id & "_XP", Math.Round(CDec(curlvl + config.pointsMultiplier), 2))
+            Console.WriteLine("[LVL] Storing lvl for " & message.Author.Id)
+            redis.setValue("Guilds_" & guild.Guild.Id & "_Users_" & message.Author.Id & "_XP", Math.Round(CDbl(curlvl + config.pointsMultiplier), 2))
+            Console.WriteLine("[LVL] stored lvl for " & message.Author.Id)
 
             ' store GLOBAL GUILD xp
-            curlvl = redis.getValue("Guilds_" & guild.Id & "_XPGLOBAL")
+            curlvl = redis.getValue("Guilds_" & guild.Guild.Id & "_XPGLOBAL")
             If curlvl = Nothing Then
                 curlvl = 0
             End If
-            redis.setValue("Guilds_" & guild.Id & "_XPGLOBAL", curlvl + Math.Round(CDec(curlvl + config.pointsMultiplier), 2))
+            redis.setValue("Guilds_" & guild.Guild.Id & "_XPGLOBAL", curlvl + Math.Round(CDbl(curlvl + config.pointsMultiplier), 2))
         Catch ex As Exception
-
+            Console.WriteLine("[E] " & ex.Message & ex.StackTrace)
         End Try
     End Sub
 End Module

@@ -13,7 +13,7 @@ Module command_rob
             Dim curcoins = redis.getValue("Users_" & robUserID & "_coins")
             Dim nextRob = redis.getValue("Users_" & message.Author.Id & "_nextRob")
             Dim secondsBeforeClaim = 0
-            Dim uTime As String = New System.Net.WebClient().DownloadString("https://bot.shadowcat.club/api/time.php")
+            Dim uTime As Double = CDbl(New System.Net.WebClient().DownloadString("https://bot.shadowcat.club/api/time.php"))
             secondsBeforeClaim = nextRob - uTime
             If secondsBeforeClaim <= 0 Then
                 If curcoins <= 0 Then
