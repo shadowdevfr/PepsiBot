@@ -13,7 +13,6 @@ Module command_level
 
             Dim eb As EmbedBuilder = New EmbedBuilder
             Dim description As String
-            description = ":warning: XP boost for shadow's birthday (from 0.15 to 0.30!)" & vbCrLf & vbCrLf
             description = "__**Global user info**__" & vbCrLf
             Dim curlvl = redis.getValue("Users_" & userToSee & "_XP")
             If curlvl Is Nothing Then
@@ -30,8 +29,13 @@ Module command_level
             If curcoins < 0 Then
                 description = description & "> <:warn:869887800210755614> **" & pronom2 & " in debt!!**" & vbCrLf
             End If
-            description = description & "> You need **" & redis.getValue("Users_" & message.Author.Id & "_objective") - curlvl & "** cat XP more to earn " & Math.Round((redis.getValue("Users_" & message.Author.Id & "_objective") * 0.8), 2) & " cattos." & vbCrLf
-            Dim percentage = Math.Round((100 * curlvl) / redis.getValue("Users_" & message.Author.Id & "_objective"), 1)
+            Dim curobj = redis.getValue("Users_" & message.Author.Id & "_objective")
+            If curobj = Nothing Then
+                redis.setValue("Users_" & message.Author.Id & "_objective", 20)
+                curobj = 20
+            End If
+            description = description & "> You need **" & Math.Round(curobj - curlvl, 2) & "** cat XP more to earn " & Math.Ceiling(curobj * 0.1) & " cattos." & vbCrLf
+            Dim percentage = Math.Round((100 * curlvl) / curobj, 1)
             Dim bar = New System.Net.WebClient().DownloadString("https://bot.shadowcat.club/api/bar.php?num=" & percentage)
             description = description & "> [" & bar & "] " & percentage & "%" & vbCrLf & vbCrLf
 

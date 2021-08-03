@@ -27,14 +27,14 @@ Module levelingChat
 
             Dim curobj = redis.getValue("Users_" & message.Author.Id & "_objective")
             If curobj = Nothing Then
-                curobj = 10
+                curobj = 20
             End If
             Dim percentage = Math.Round((100 * curlvl) / curobj, 1)
             If percentage >= 100 Then
                 ' objective done
                 Dim curcoins = redis.getValue("Users_" & message.Author.Id & "_coins")
-                redis.setValue("Users_" & message.Author.Id & "_coins", Math.Round(curcoins + (curobj * 0.8), 2))
-                redis.setValue("Users_" & message.Author.Id & "_objective", Math.Round(CDbl(curobj + 10), 2))
+                redis.setValue("Users_" & message.Author.Id & "_coins", Math.Ceiling(curcoins + (curobj * 0.1)))
+                redis.setValue("Users_" & message.Author.Id & "_objective", Math.Round(CDbl(curobj + 50), 2))
             End If
 
 

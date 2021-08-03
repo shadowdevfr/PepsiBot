@@ -75,6 +75,14 @@ Module commandHandler
                 Task.Run(Sub() command_sus.run(message, args(1).Replace("<@", "").Replace("!", "").Replace(">", "")))
             End If
         End If
+        If args(0) = "$doggo" Then
+            Console.WriteLine("[Commands]" & message.Author.Username & "#" & message.Author.Discriminator & " executed command " & args(0))
+            If args.Length < 2 Then
+                message.Channel.SendMessageAsync("You need to ping an user!")
+            Else
+                Task.Run(Sub() command_doggo.run(message, args(1).Replace("<@", "").Replace("!", "").Replace(">", "")))
+            End If
+        End If
 
         If message.Author.Id = 316818056049590282 Then
             If args(0) = "$addCoins" Then

@@ -34,9 +34,9 @@ Module timeCheckClock
             Dim eb As EmbedBuilder = New EmbedBuilder
             eb.WithColor(Color.Gold)
             eb.WithTitle(":flushed: Daily Pepsi picture delivered!")
-            eb.WithDescription("Here is the pepsi pic for today! Enjoy! You can react with :+1: or :-1: if you like it or no!" & vbCrLf & vbCrLf & extrainfo)
+            eb.WithDescription("Here is the pepsi pic for today! Enjoy! You can react with :+1: or :-1: if you like it or no!" & vbCrLf & ":arrow_right: **Can't see the picture?** That's maybe because the picture is in 4K, which it's too big for discord to display properly. If it's not loading, [click here for the direct link of that picture](" & picture & ")." & vbCrLf & vbCrLf & extrainfo)
             eb.WithFooter("Pepsi bot - Made by X_Shadow_#5962 - Invite it at https://bot.shadowcat.club")
-            eb.WithImageUrl(manualPic)
+            eb.WithImageUrl(picture)
             Console.WriteLine("[Picture check clock] Started to send")
             For Each guild In discordEv.Guilds
                 Dim channels = guild.Channels.Where(Function(x) TypeOf x Is ISocketMessageChannel)
