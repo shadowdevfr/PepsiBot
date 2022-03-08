@@ -36,6 +36,13 @@ Module command_rob
                 End If
 
                 Dim calc1 = curcoins / 2
+                If calc1 < 3 Then
+                    Dim ebe As EmbedBuilder = New EmbedBuilder
+                    ebe.WithDescription("<:denied:869341509160419399> Not worth it, this user got less than 3 coins...")
+                    ebe.WithColor(Color.Red)
+                    Await message.Channel.SendMessageAsync("", False, ebe.Build)
+                    Exit Sub
+                End If
                 Dim toEarn = random.Next(2, calc1)
 
                 redis.setValue("Users_" & robUserID & "_coins", Math.Round(curcoins - toEarn, 2))

@@ -41,7 +41,7 @@ Module Program
         UpdateCaption("Logged on as: " + discordEv.CurrentUser.Username) 'LoggedIn event still dosent capture CurrentUser info, so stuck with this.
         statusClock.updateStatus()
         statusClock.startStatusClock()
-        timeCheckClock.startClock()
+        'timeCheckClock.startClock()
         ec_items.init()
 
         Return Task.CompletedTask
